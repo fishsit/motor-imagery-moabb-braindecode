@@ -461,16 +461,45 @@ Subject 3 的准确率为 66.32%，而 Subject 5 仅为 25.69%。较大的被试
 motor-imagery-moabb-braindecode
 ├── README.md
 ├── requirements.txt
+├── .gitignore
 ├── configs
 ├── notebooks
 ├── scripts
-│   ├── 01～09   环境、数据读取与 CSP-SVM 基线
-│   ├── 10～17   深度学习数据、EEGNet 与 ShallowFBCSPNet
-│   ├── 18～24   EMS、Cropped Training 与训练结果整理
-│   ├── 25～26   多被试 Cropped Training
-│   ├── 27_loso_single_fold.py
-│   ├── 28_run_loso_all.py
-│   └── 29_plot_loso_results.py
+│   ├── 01_data_processing
+│   │   ├── check_environment.py
+│   │   ├── load_bnci2014.py
+│   │   ├── create_epochs.py
+│   │   └── preprocess_eeg.py
+│   ├── 02_baseline_csp_svm
+│   │   ├── train_csp_svm_binary.py
+│   │   ├── train_csp_svm_multiclass.py
+│   │   ├── train_multi_subject_csp_svm.py
+│   │   ├── loso_csp_svm.py
+│   │   └── loso_full_csp_svm.py
+│   ├── 03_deep_learning
+│   │   ├── prepare_deep_learning.py
+│   │   ├── create_dataloader.py
+│   │   ├── train_eegnet.py
+│   │   ├── plot_eegnet_history.py
+│   │   ├── evaluate_eegnet.py
+│   │   ├── train_shallowfbcspnet.py
+│   │   ├── plot_shallow_history.py
+│   │   ├── evaluate_shallowfbcspnet.py
+│   │   ├── train_shallow_no_ems.py
+│   │   └── train_shallow_with_ems.py
+│   ├── 04_cropped_training
+│   │   ├── 20_prepare_cropped_dataset.py
+│   │   ├── 21_create_windows_dataset.py
+│   │   ├── train_single_subject_cropped.py
+│   │   ├── 23_plot_cropped_history.py
+│   │   ├── 24_generate_experiment_summary.py
+│   │   ├── prepare_multi_subject_cropped.py
+│   │   └── train_multi_subject_cropped.py
+│   ├── 05_loso_evaluation
+│   │   ├── train_single_fold.py
+│   │   ├── run_all_folds.py
+│   │   └── plot_loso_results.py
+│   └── utils
 ├── data
 │   ├── X_eeg.npy
 │   └── y_label.npy
@@ -479,6 +508,10 @@ motor-imagery-moabb-braindecode
 │   └── LOSO 各折模型参数
 └── results
     ├── figures
+    │   ├── eegnet_training_curve.png
+    │   ├── eegnet_confusion_matrix.png
+    │   ├── shallowfbcspnet_training_curve.png
+    │   ├── shallowfbcspnet_confusion_matrix.png
     │   ├── shallow_cropped_accuracy.png
     │   ├── shallow_cropped_loss.png
     │   ├── loso_accuracy_subjects.png
@@ -486,12 +519,33 @@ motor-imagery-moabb-braindecode
     └── metrics
         ├── experiment_summary.csv
         ├── loso_summary.csv
-        ├── loso_all_results.npz
         ├── model_comparison.csv
+        ├── loso_all_results.npz
         └── loso_subject_*_result.npz
 ```
 
-> `data/` 与训练模型文件通常不提交到 GitHub，具体规则以 `.gitignore` 为准。
+各脚本模块按照实验流程划分：
+
+```text
+01_data_processing
+        ↓
+02_baseline_csp_svm
+        ↓
+03_deep_learning
+        ↓
+04_cropped_training
+        ↓
+05_loso_evaluation
+```
+
+- `01_data_processing`：环境检查、数据读取、Epoch 构建与基础预处理；
+- `02_baseline_csp_svm`：CSP + SVM 二分类、四分类、多被试及 LOSO 基线；
+- `03_deep_learning`：深度学习数据准备、EEGNet、ShallowFBCSPNet 与 EMS 对比；
+- `04_cropped_training`：WindowsDataset、单被试和多被试 Cropped Training；
+- `05_loso_evaluation`：单折训练、完整 9 折运行与 LOSO 结果可视化；
+- `utils`：预留公共数据处理、配置和可视化工具。
+
+> `data/`、`models/`、原始 `.mat` 数据及体积较大的 `.npz` 文件通常不提交到 GitHub，具体规则以 `.gitignore` 为准。
 
 ---
 
@@ -516,75 +570,132 @@ pip install -r requirements.txt
 ### 3. 检查环境
 
 ```powershell
-python .\scripts\01_check_environment.py
+python .\scripts\01_data_processing\check_environment.py
 ```
 
 ---
 
 ## 十三、运行方法
 
+以下命令均在项目根目录中执行。
+
 ### 1. 数据读取与检查
 
 ```powershell
-python .\scripts\02_load_bnci2014_001.py
-python .\scripts\03_create_epochs.py
-python .\scripts\04_preprocess_eeg.py
+python .\scripts\01_data_processing\load_bnci2014.py
+python .\scripts\01_data_processing\create_epochs.py
+python .\scripts\01_data_processing\preprocess_eeg.py
 ```
 
 ### 2. CSP + SVM 基线
 
-```powershell
-python .\scripts\06_csp_svm_multiclass.py
-python .\scripts\09_loso_full_bnci.py
-```
-
-### 3. EEGNet
+运行单被试四分类：
 
 ```powershell
-python .\scripts\12_train_eegnet.py
-python .\scripts\13_plot_eegnet.py
-python .\scripts\14_evaluate_eegnet.py
+python .\scripts\02_baseline_csp_svm\train_csp_svm_multiclass.py
 ```
 
-### 4. ShallowFBCSPNet
+运行多被试基线：
 
 ```powershell
-python .\scripts\15_train_shallowfbcspnet.py
-python .\scripts\16_plot_shallow.py
-python .\scripts\17_evaluate_shallow.py
+python .\scripts\02_baseline_csp_svm\train_multi_subject_csp_svm.py
 ```
 
-### 5. 单被试 Cropped Training
+运行完整数据 LOSO：
 
 ```powershell
-python .\scripts\22_train_shallow_official_cropped.py
-python .\scripts\23_plot_cropped_history.py
+python .\scripts\02_baseline_csp_svm\loso_full_csp_svm.py
 ```
 
-### 6. 多被试跨会话训练
+### 3. 准备深度学习数据
 
 ```powershell
-python .\scripts\26_train_multi_subject_cropped.py
+python .\scripts\03_deep_learning\prepare_deep_learning.py
+python .\scripts\03_deep_learning\create_dataloader.py
 ```
 
-### 7. 完整 9 折 LOSO
+### 4. EEGNet
+
+```powershell
+python .\scripts\03_deep_learning\train_eegnet.py
+python .\scripts\03_deep_learning\plot_eegnet_history.py
+python .\scripts\03_deep_learning\evaluate_eegnet.py
+```
+
+### 5. ShallowFBCSPNet
+
+训练基础模型：
+
+```powershell
+python .\scripts\03_deep_learning\train_shallowfbcspnet.py
+python .\scripts\03_deep_learning\plot_shallow_history.py
+python .\scripts\03_deep_learning\evaluate_shallowfbcspnet.py
+```
+
+运行 EMS 对比实验：
+
+```powershell
+python .\scripts\03_deep_learning\train_shallow_no_ems.py
+python .\scripts\03_deep_learning\train_shallow_with_ems.py
+```
+
+### 6. Cropped Training 数据检查
+
+```powershell
+python .\scripts\04_cropped_training\20_prepare_cropped_dataset.py
+python .\scripts\04_cropped_training\21_create_windows_dataset.py
+```
+
+### 7. 单被试 Cropped Training
+
+```powershell
+python .\scripts\04_cropped_training\train_single_subject_cropped.py
+python .\scripts\04_cropped_training\23_plot_cropped_history.py
+```
+
+### 8. 多被试跨会话训练
+
+```powershell
+python .\scripts\04_cropped_training\prepare_multi_subject_cropped.py
+python .\scripts\04_cropped_training\train_multi_subject_cropped.py
+```
+
+生成阶段性实验汇总：
+
+```powershell
+python .\scripts\04_cropped_training\24_generate_experiment_summary.py
+```
+
+### 9. 完整 9 折 LOSO
 
 运行单折：
 
 ```powershell
-python .\scripts\27_loso_single_fold.py
+python .\scripts\05_loso_evaluation\train_single_fold.py
 ```
 
 运行全部 9 折：
 
 ```powershell
-python .\scripts\28_run_loso_all.py
+python .\scripts\05_loso_evaluation\run_all_folds.py
 ```
 
 生成 LOSO 可视化：
 
 ```powershell
-python .\scripts\29_plot_loso_results.py
+python .\scripts\05_loso_evaluation\plot_loso_results.py
+```
+
+LOSO 完整流程为：
+
+```text
+训练被试内部跨会话选择最佳 Epoch
+                ↓
+使用 8 名训练被试全部会话重新训练
+                ↓
+在 1 名完全未见被试上进行 Trial-level 测试
+                ↓
+循环 9 折并汇总 Accuracy、Macro-F1 与混淆矩阵
 ```
 
 ---

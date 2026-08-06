@@ -25,7 +25,7 @@ from sklearn.metrics import (
 SUBJECT_IDS = list(range(1, 10))
 
 SINGLE_FOLD_SCRIPT = Path(
-    "scripts/27_loso_single_fold.py"
+    "scripts/05_loso_evaluation/train_single_fold.py"
 )
 
 RESULT_DIR = Path(
