@@ -1,0 +1,5 @@
+﻿model,subject,evaluation_protocol,accuracy,macro_f1,status,notes
+ShallowFBCSPNet + EMS + Cropped,1,0train to 1test cross-session validation,0.6493,,Development result,Single-subject result; not LOSO.
+Deep4Net baseline,1,0train to 1test checkpoint validation,0.4549,0.378,Development result,"Dropout=0.5, AdamW, weight decay=5e-4."
+Deep4Net low regularization,1,0train to 1test checkpoint validation,0.6389,0.631,Development result,"Dropout=0.25, Adam, weight decay=0."
+EEGNet,1,Comparable final evaluation not completed,,,Pending,Existing EEGNet training progress is not sufficient for a protocol-matched final result.

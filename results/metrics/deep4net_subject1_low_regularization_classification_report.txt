@@ -1,0 +1,28 @@
+Deep4Net Subject 1 Low-Regularization Evaluation
+================================================
+Accuracy          : 0.6389
+Balanced accuracy : 0.6389
+Macro-F1          : 0.6310
+Weighted-F1       : 0.6310
+
+True class counts
+-----------------
+{'feet': 72, 'left_hand': 72, 'right_hand': 72, 'tongue': 72}
+
+Predicted class counts
+----------------------
+{'feet': 83, 'left_hand': 103, 'right_hand': 66, 'tongue': 36}
+
+Classification report
+---------------------
+              precision    recall  f1-score   support
+
+        feet     0.5181    0.5972    0.5548        72
+   left_hand     0.5922    0.8472    0.6971        72
+  right_hand     0.7879    0.7222    0.7536        72
+      tongue     0.7778    0.3889    0.5185        72
+
+    accuracy                         0.6389       288
+   macro avg     0.6690    0.6389    0.6310       288
+weighted avg     0.6690    0.6389    0.6310       288
+

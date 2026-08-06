@@ -1,0 +1,25 @@
+Deep4Net Subject 1 Cross-Session Experiment
+===========================================
+Subject ID            : 1
+Train session         : 0train
+Validation session    : 1test
+Maximum epochs        : 40
+Completed epochs      : 20
+Stopped early         : True
+Early stop patience   : 6
+Learning rate         : 0.001
+Weight decay          : 0.0005
+Batch size            : 32
+Trainable parameters  : 278879
+Dense predictions     : 479
+Best epoch            : 14
+Best train accuracy   : 0.4410
+Best valid accuracy   : 0.4549
+Best train loss       : 0.5880
+Best valid loss       : 2.5669
+Final train accuracy  : 0.4896
+Final valid accuracy  : 0.4340
+Final train loss      : 0.2944
+Final valid loss      : 3.9193
+Best model path       : models\deep4net_subject1_best.pth
+Final model path      : models\deep4net_subject1_final.pth

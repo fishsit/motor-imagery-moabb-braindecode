@@ -1,0 +1,16 @@
+Deep4Net Subject 7 Run-wise CV Summary
+==========================================================
+Run order               : ['0', '1', '2', '3', '4', '5']
+Number of folds         : 6
+Maximum CV epochs       : 35
+Selected epoch          : 32
+CV mean valid accuracy  : 0.5451
+CV valid accuracy std   : 0.1016
+Final training samples  : 288
+Final train accuracy    : 0.7847
+Held-out test samples   : 288
+Test accuracy           : 0.5208
+Test balanced accuracy  : 0.5208
+Test Macro-F1           : 0.4716
+Test Weighted-F1        : 0.4716
+Final model             : models\deep4net_subject7_runwise_cv_final.pth

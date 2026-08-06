@@ -1,0 +1,41 @@
+Deep4Net Subject 5 Run-wise CV Test
+=======================================================
+Number of runs          : 6
+Maximum CV epochs       : 35
+Selected epoch          : 23
+CV mean valid accuracy  : 0.3472
+CV valid accuracy std   : 0.0627
+Final train accuracy    : 0.6597
+Test samples            : 288
+Test accuracy           : 0.2812
+Balanced accuracy       : 0.2812
+Macro-F1                : 0.1970
+Weighted-F1             : 0.1970
+
+True class counts
+-----------------
+{'feet': 72, 'left_hand': 72, 'right_hand': 72, 'tongue': 72}
+
+Predicted class counts
+----------------------
+{'feet': 82, 'left_hand': 200, 'right_hand': 5, 'tongue': 1}
+
+Classification report
+---------------------
+              precision    recall  f1-score   support
+
+        feet     0.2927    0.3333    0.3117        72
+   left_hand     0.2700    0.7500    0.3971        72
+  right_hand     0.4000    0.0278    0.0519        72
+      tongue     1.0000    0.0139    0.0274        72
+
+    accuracy                         0.2812       288
+   macro avg     0.4907    0.2812    0.1970       288
+weighted avg     0.4907    0.2812    0.1970       288
+
+Confusion matrix
+----------------
+[[24 46  2  0]
+ [17 54  1  0]
+ [17 53  2  0]
+ [24 47  0  1]]

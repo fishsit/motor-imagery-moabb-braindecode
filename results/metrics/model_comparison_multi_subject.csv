@@ -1,0 +1,4 @@
+﻿model,model_type,evaluation_protocol,subjects,n_subjects,mean_accuracy,std_accuracy,mean_macro_f1,std_macro_f1,comparison_group,directly_comparable,notes
+CSP + SVM,Traditional machine learning,9-subject LOSO,1-9,9,0.3889,0.1329,,,Cross-subject evaluation,False,Leave-one-subject-out cross-subject evaluation.
+ShallowFBCSPNet,Deep learning,9-subject LOSO,1-9,9,0.467,0.1598,0.4296,,Cross-subject evaluation,True,Same LOSO subject protocol as CSP + SVM.
+Deep4Net,Deep learning,"Run-wise CV inside 0train, held-out 1test evaluation","3,4,5,6,7,8,9",7,0.4623015873015873,0.14444094674234859,0.41795950721798614,0.16441968363698506,Within-subject cross-session evaluation,False,Subjects 3-9; evaluation protocol differs from LOSO.

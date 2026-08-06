@@ -1,0 +1,26 @@
+Deep4Net Small Balanced Subset Overfit Test
+===========================================
+Samples per class : 16
+Total samples     : 64
+Training accuracy : 1.0000
+Predicted counts  : [16, 16, 16, 16]
+
+Classification report
+---------------------
+              precision    recall  f1-score   support
+
+        feet     1.0000    1.0000    1.0000        16
+   left_hand     1.0000    1.0000    1.0000        16
+  right_hand     1.0000    1.0000    1.0000        16
+      tongue     1.0000    1.0000    1.0000        16
+
+    accuracy                         1.0000        64
+   macro avg     1.0000    1.0000    1.0000        64
+weighted avg     1.0000    1.0000    1.0000        64
+
+Confusion matrix
+----------------
+[[16  0  0  0]
+ [ 0 16  0  0]
+ [ 0  0 16  0]
+ [ 0  0  0 16]]

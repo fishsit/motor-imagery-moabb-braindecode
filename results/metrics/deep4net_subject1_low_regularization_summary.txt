@@ -1,0 +1,27 @@
+Deep4Net Subject 1 Low-Regularization Experiment
+================================================
+Subject ID            : 1
+Train session         : 0train
+Validation session    : 1test
+Maximum epochs        : 60
+Completed epochs      : 18
+Stopped early         : True
+Early stop patience   : 10
+Learning rate         : 0.001
+Optimizer             : Adam
+Dropout               : 0.25
+Weight decay          : 0.0
+Batch size            : 32
+Trainable parameters  : 278879
+Dense predictions     : 479
+Best epoch            : 8
+Best train accuracy   : 0.9132
+Best valid accuracy   : 0.6389
+Best train loss       : 0.3653
+Best valid loss       : 0.9890
+Final train accuracy  : 0.8125
+Final valid accuracy  : 0.5556
+Final train loss      : 0.0783
+Final valid loss      : 1.7738
+Best model path       : models\deep4net_subject1_low_regularization_best.pth
+Final model path      : models\deep4net_subject1_low_regularization_final.pth
