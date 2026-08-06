@@ -1,0 +1,6 @@
+Method,Accuracy
+CSP+SVM,0.3659
+EEGNet,0.4175
+ShallowFBCSPNet,0.2951
+ShallowFBCSPNet+EMS,0.5323
+ShallowFBCSPNet+EMS+Cropped,0.6493

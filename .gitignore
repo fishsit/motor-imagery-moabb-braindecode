@@ -32,6 +32,21 @@ MANIFEST
 *.manifest
 *.spec
 
+# EEG raw dataset
+data/
+
+# MNE downloaded datasets
+mne_data/
+MNE-bnci-data/
+C-/
+
+# trained models
+models/*.pth
+models/*.pt
+
+# large experiment files
+results/metrics/*.npz
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
@@ -219,3 +234,6 @@ __marimo__/
 
 # PyCharm
 .idea/
+
+# trained models
+models/*.pth
