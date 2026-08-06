@@ -1,5 +1,82 @@
 # 基于 MOABB 与 Braindecode 的运动想象脑电分类研究
 
+## 项目流程
+
+```text
+                     BNCI2014_001 EEG
+                              ↓
+                    MOABB 数据下载与管理
+                              ↓
+                   MNE / Braindecode 数据读取
+                              ↓
+               通道筛选、带通滤波与单位转换
+                              ↓
+             Exponential Moving Standardization
+                              ↓
+                   Epoch / WindowsDataset 构建
+                              ↓
+        ┌─────────────────────┴─────────────────────┐
+        ↓                                           ↓
+   CSP + SVM                                  深度学习模型
+   传统基线                              ┌───────────┴───────────┐
+                                        ↓                       ↓
+                                     EEGNet            ShallowFBCSPNet
+                                                                ↓
+                                                    EMS + Cropped Training
+                                                                ↓
+                                                      9 折 LOSO 跨被试评价
+                                                                ↓
+                                            Accuracy / Macro-F1 / 混淆矩阵
+```
+
+---
+
+## 项目亮点
+
+- 基于 MOABB 构建标准化公开 EEG 数据接口；
+- 使用 MNE 和 Braindecode 完成真实脑电数据读取与预处理；
+- 同时实现 CSP + SVM、EEGNet 和 ShallowFBCSPNet；
+- 引入 Exponential Moving Standardization 改善训练稳定性；
+- 使用 WindowsDataset、Dense Prediction 和 CroppedLoss 实现 Cropped Training；
+- 完成单被试跨会话、多被试跨会话和完整 9 折 LOSO；
+- LOSO 中测试被试不参与梯度更新、EarlyStopping 或最佳 epoch 选择；
+- 保存模型、训练历史、评价指标、混淆矩阵和汇总结果；
+- 按数据处理、传统基线、深度学习、Cropped Training 和 LOSO 模块组织代码；
+- 提供独立实验报告、模型对比分析和 LOSO 结果分析文档。
+
+---
+
+## 主要技术
+
+| 类别 | 工具或方法 |
+| --- | --- |
+| 数据集管理 | MOABB |
+| EEG 信号处理 | MNE |
+| EEG 深度学习 | Braindecode |
+| 深度学习框架 | PyTorch |
+| 传统机器学习 | Scikit-learn |
+| 主要模型 | CSP + SVM、EEGNet、ShallowFBCSPNet |
+| 训练方法 | EMS、Dense Prediction、Cropped Training |
+| 评价协议 | 随机划分、跨会话、LOSO |
+| 编程语言 | Python |
+
+---
+
+## 项目文档
+
+详细实验设计、模型比较与结果分析：
+
+- [MI-BCI 实验报告](docs/MI_BCI_experiment_report.md)  
+  介绍数据集、预处理、模型、实验协议、实验结果、局限性和后续工作。
+
+- [模型对比分析](docs/model_comparison.md)  
+  对比 CSP + SVM、EEGNet、ShallowFBCSPNet、EMS 和 Cropped Training。
+
+- [LOSO 跨被试实验分析](docs/LOSO_analysis.md)  
+  介绍无测试泄漏的 9 折 LOSO 流程、逐被试结果、混淆矩阵和优化方向。
+
+---
+
 ## 项目简介
 
 本项目面向**运动想象脑机接口（Motor Imagery Brain-Computer Interface，MI-BCI）**，基于公开数据集 **BNCI2014_001（BCI Competition IV 2a）**，使用 **MOABB、MNE、Braindecode、Scikit-learn 与 PyTorch**，复现从脑电数据读取、信号预处理、传统机器学习建模，到深度学习训练和跨被试评价的完整实验流程。
