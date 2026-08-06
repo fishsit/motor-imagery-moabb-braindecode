@@ -1,157 +1,78 @@
-# 基于 MOABB 与 Braindecode 的运动想象脑电分类研究
+# Motor Imagery BCI Reproduction
 
-## 项目流程
+基于 **MOABB、MNE、Braindecode 与 PyTorch** 的运动想象脑机接口复现项目。
+
+本项目以 **BNCI2014_001（BCI Competition IV 2a）** 为主要数据集，完成了从数据加载、预处理、传统机器学习基线，到 EEGNet、ShallowFBCSPNet、Deep4Net 深度学习模型训练与评价的完整流程。
+
+项目重点包括：
+
+- 四分类运动想象 EEG 解码；
+- CSP + SVM 传统基线；
+- EEGNet、ShallowFBCSPNet、Deep4Net；
+- Cropped decoding；
+- Exponential Moving Standardization；
+- Leave-One-Subject-Out 跨被试评价；
+- Run-wise 交叉验证与跨会话测试；
+- 自动生成实验汇总、模型对比表和结果图。
+
+---
+
+## 1. 项目目标
+
+本项目用于系统学习和复现运动想象 BCI 算法，主要目标为：
+
+1. 熟悉 EEG 数据的加载、通道选择、滤波、标准化和 Epoch 构建；
+2. 掌握 CSP + SVM 传统运动想象分类流程；
+3. 理解 EEGNet、ShallowFBCSPNet 和 Deep4Net 的结构与训练方式；
+4. 掌握 Cropped decoding 和 Dense Prediction；
+5. 建立规范的训练集、验证集和测试集划分流程；
+6. 比较跨被试与被试内跨会话两类评价协议；
+7. 形成可复现、可扩展的 BCI 实验仓库。
+
+---
+
+## 2. 数据集
+
+项目当前主要使用：
 
 ```text
-                     BNCI2014_001 EEG
-                              ↓
-                    MOABB 数据下载与管理
-                              ↓
-                   MNE / Braindecode 数据读取
-                              ↓
-               通道筛选、带通滤波与单位转换
-                              ↓
-             Exponential Moving Standardization
-                              ↓
-                   Epoch / WindowsDataset 构建
-                              ↓
-        ┌─────────────────────┴─────────────────────┐
-        ↓                                           ↓
-   CSP + SVM                                  深度学习模型
-   传统基线                              ┌───────────┴───────────┐
-                                        ↓                       ↓
-                                     EEGNet            ShallowFBCSPNet
-                                                                ↓
-                                                    EMS + Cropped Training
-                                                                ↓
-                                                      9 折 LOSO 跨被试评价
-                                                                ↓
-                                            Accuracy / Macro-F1 / 混淆矩阵
+BNCI2014_001
 ```
 
----
+对应 BCI Competition IV 2a 四分类运动想象数据。
 
-## 项目亮点
+### 数据集基本信息
 
-- 基于 MOABB 构建标准化公开 EEG 数据接口；
-- 使用 MNE 和 Braindecode 完成真实脑电数据读取与预处理；
-- 同时实现 CSP + SVM、EEGNet 和 ShallowFBCSPNet；
-- 引入 Exponential Moving Standardization 改善训练稳定性；
-- 使用 WindowsDataset、Dense Prediction 和 CroppedLoss 实现 Cropped Training；
-- 完成单被试跨会话、多被试跨会话和完整 9 折 LOSO；
-- LOSO 中测试被试不参与梯度更新、EarlyStopping 或最佳 epoch 选择；
-- 保存模型、训练历史、评价指标、混淆矩阵和汇总结果；
-- 按数据处理、传统基线、深度学习、Cropped Training 和 LOSO 模块组织代码；
-- 提供独立实验报告、模型对比分析和 LOSO 结果分析文档。
-
----
-
-## 主要技术
-
-| 类别 | 工具或方法 |
-| --- | --- |
-| 数据集管理 | MOABB |
-| EEG 信号处理 | MNE |
-| EEG 深度学习 | Braindecode |
-| 深度学习框架 | PyTorch |
-| 传统机器学习 | Scikit-learn |
-| 主要模型 | CSP + SVM、EEGNet、ShallowFBCSPNet |
-| 训练方法 | EMS、Dense Prediction、Cropped Training |
-| 评价协议 | 随机划分、跨会话、LOSO |
-| 编程语言 | Python |
-
----
-
-## 项目文档
-
-详细实验设计、模型比较与结果分析：
-
-- [MI-BCI 实验报告](docs/MI_BCI_experiment_report.md)  
-  介绍数据集、预处理、模型、实验协议、实验结果、局限性和后续工作。
-
-- [模型对比分析](docs/model_comparison.md)  
-  对比 CSP + SVM、EEGNet、ShallowFBCSPNet、EMS 和 Cropped Training。
-
-- [LOSO 跨被试实验分析](docs/LOSO_analysis.md)  
-  介绍无测试泄漏的 9 折 LOSO 流程、逐被试结果、混淆矩阵和优化方向。
-
----
-
-## 项目简介
-
-本项目面向**运动想象脑机接口（Motor Imagery Brain-Computer Interface，MI-BCI）**，基于公开数据集 **BNCI2014_001（BCI Competition IV 2a）**，使用 **MOABB、MNE、Braindecode、Scikit-learn 与 PyTorch**，复现从脑电数据读取、信号预处理、传统机器学习建模，到深度学习训练和跨被试评价的完整实验流程。
-
-项目现已完成：
-
-- CSP + SVM 传统机器学习基线；
-- EEGNet 与 ShallowFBCSPNet 深度学习实验；
-- 指数移动标准化（Exponential Moving Standardization，EMS）；
-- Braindecode Cropped Training；
-- 单被试跨会话实验；
-- 9 被试跨会话实验；
-- 9 折 LOSO 跨被试实验；
-- 训练曲线、被试准确率与混淆矩阵可视化；
-- 模型参数与实验指标保存。
-
-本项目重点不只是获得单次分类结果，而是建立一套**可重复、可比较、可扩展的运动想象 EEG 实验框架**。
-
----
-
-## 一、研究目标
-
-本项目主要完成以下任务：
-
-1. 使用 MOABB 自动下载和管理公开脑电数据集；
-2. 使用 MNE 与 Braindecode 读取真实 EEG 数据；
-3. 分析被试、会话、运行、通道、采样率和事件标签；
-4. 将连续脑电信号切分为独立运动想象试次；
-5. 完成 EEG 通道筛选、带通滤波和动态标准化；
-6. 使用 CSP 提取空间特征，并通过 SVM 完成传统分类基线；
-7. 使用 EEGNet 和 ShallowFBCSPNet 完成深度学习分类；
-8. 使用 WindowsDataset、Dense Prediction 和 CroppedLoss 实现 Cropped Training；
-9. 完成单被试、多被试跨会话及 LOSO 跨被试评价；
-10. 保存模型、训练历史、混淆矩阵和汇总指标；
-11. 为后续迁移学习、领域自适应和实时 BCI 推理奠定基础。
-
----
-
-## 二、数据集
-
-本项目使用 **BNCI2014_001** 数据集，也称为 **BCI Competition IV 2a**。
-
-| 项目 | 数据 |
-| --- | --- |
+| 项目 | 内容 |
+|---|---|
 | 被试数量 | 9 |
-| 每名被试会话数 | 2 |
-| 每个会话运行数 | 6 |
-| 每个运行试次数 | 48 |
-| 每名被试总试次数 | 576 |
-| 全部被试总试次数 | 5184 |
-| 运动想象类别 | 4 类 |
 | EEG 通道 | 22 |
 | EOG 通道 | 3 |
-| 刺激通道 | 1 |
 | 采样率 | 250 Hz |
-| 单次试次时间范围 | 0～4 s |
-| 单次试次采样点 | 1001 |
+| 会话数量 | 每名被试 2 个会话 |
+| 每个会话 Run 数 | 6 |
+| 每个 Run Trial 数 | 48 |
+| 每名被试 Trial 数 | 576 |
+| 总 Trial 数 | 5184 |
+| 分类数量 | 4 |
 
-四类运动想象任务为：
+### 类别映射
 
-- `feet`
-- `left_hand`
-- `right_hand`
-- `tongue`
-
-MOABB 在首次运行时会自动下载数据。未单独设置数据目录时，数据通常保存在用户目录下的 MNE 数据文件夹中，不直接写入本仓库。
+| 标签 | 类别 |
+|---:|---|
+| 0 | feet |
+| 1 | left_hand |
+| 2 | right_hand |
+| 3 | tongue |
 
 ---
 
-## 三、实验环境
+## 3. 环境配置
 
-本项目当前实验环境记录如下：
+已验证环境：
 
 | 软件 | 版本 |
-| --- | --- |
+|---|---:|
 | Python | 3.11.9 |
 | PyTorch | 2.13.0+cpu |
 | MOABB | 1.5.0 |
@@ -162,489 +83,28 @@ MOABB 在首次运行时会自动下载数据。未单独设置数据目录时�
 | Scikit-learn | 1.9.0 |
 | 操作系统 | Windows 11 |
 
-当前实验主要在 CPU 环境中运行，后续可迁移至 CUDA GPU。
+当前实验可在 CPU 环境运行，但 Deep4Net 多折交叉验证耗时较长。
 
----
-
-## 四、总体技术路线
-
-```text
-BNCI2014_001 原始 EEG
-            ↓
-      MOABB 自动下载与管理
-            ↓
-       MNE / Braindecode 读取
-            ↓
-解析 Subject / Session / Run / Event
-            ↓
-       EEG 通道筛选与单位转换
-            ↓
-       4～38 Hz 带通滤波
-            ↓
-  Exponential Moving Standardization
-            ↓
-      Epoch / WindowsDataset 构建
-            ↓
- ┌───────────────────────────────┐
- │  CSP + SVM                    │
- │  EEGNet                       │
- │  ShallowFBCSPNet              │
- │  ShallowFBCSPNet + Cropped    │
- └───────────────────────────────┘
-            ↓
-单被试 / 跨会话 / LOSO 跨被试评价
-            ↓
- Accuracy / Macro-F1 / 混淆矩阵
-```
-
----
-
-## 五、数据预处理
-
-### 1. EEG 通道筛选
-
-原始记录包含：
-
-```text
-22 EEG + 3 EOG + 1 Stim = 26 通道
-```
-
-建模时仅保留 22 个 EEG 通道，避免眼电通道和刺激通道对模型产生干扰。
-
-### 2. 单位转换
-
-MNE 中 EEG 信号默认以伏特（V）存储。Braindecode 深度学习流程中将信号转换为微伏（μV）：
-
-```text
-V × 1e6 → μV
-```
-
-### 3. 带通滤波
-
-传统 CSP-SVM 基线主要使用：
-
-```text
-8～30 Hz
-```
-
-Braindecode Cropped Training 流程使用：
-
-```text
-4～38 Hz
-```
-
-该范围覆盖与运动想象相关的 μ 节律和 β 节律。
-
-### 4. 指数移动标准化
-
-采用 Braindecode 的：
-
-```text
-Exponential Moving Standardization
-```
-
-用于动态调整 EEG 信号的均值和方差，减小信号漂移、采集状态变化和幅值尺度差异的影响。
-
-### 5. Epoch 与窗口构建
-
-普通 Epoch 数据形状为：
-
-```text
-样本数 × 22 通道 × 1001 时间点
-```
-
-例如单个运行：
-
-```text
-48 × 22 × 1001
-```
-
-在 Cropped Training 中，模型使用较长计算窗口并输出多个密集时间预测，最终对同一 trial 内的多个 crop 预测进行融合，得到 trial-level 分类结果。
-
----
-
-## 六、模型与方法
-
-### 1. CSP + SVM
-
-传统运动想象分类流程：
-
-```text
-EEG
- ↓
-带通滤波
- ↓
-CSP 空间滤波
- ↓
-对数方差特征
- ↓
-SVM 四分类
-```
-
-CSP + SVM 用于建立传统机器学习基线，并与深度学习模型进行比较。
-
-### 2. EEGNet
-
-EEGNet 是面向 EEG 设计的轻量级卷积神经网络，主要包含：
-
-```text
-时间卷积
-  ↓
-深度空间卷积
-  ↓
-可分离卷积
-  ↓
-全连接分类
-```
-
-其特点是参数量较小，能够联合学习时间和空间特征。
-
-### 3. ShallowFBCSPNet
-
-ShallowFBCSPNet 将 FBCSP 的思想融入卷积网络，主要结构包括：
-
-```text
-时间卷积
-  ↓
-空间卷积
-  ↓
-平方非线性
-  ↓
-平均池化
-  ↓
-对数变换
-  ↓
-分类输出
-```
-
-该模型适合学习与运动想象相关的频带功率和空间模式。
-
-### 4. Cropped Training
-
-Braindecode Cropped Training 的核心流程为：
-
-```text
-ShallowFBCSPNet
-        ↓
-to_dense_prediction_model()
-        ↓
-多个时间位置的密集预测
-        ↓
-CroppedLoss
-        ↓
-Trial-level prediction
-```
-
-相较于每个 trial 仅产生一次预测，Cropped Training 能够更充分利用 trial 内的时序信息。
-
----
-
-## 七、实验设计
-
-### 1. 单被试随机划分
-
-将同一被试或混合被试的 trial 随机划分为训练集和测试集。
-
-该方法适合快速验证模型能否正常学习，但训练集和测试集可能包含相同被试，因此不能直接代表跨被试泛化能力。
-
-### 2. 单被试跨会话
-
-使用同一被试的：
-
-```text
-0train 会话 → 训练
-1test 会话  → 验证
-```
-
-用于评价模型对同一用户不同采集会话的泛化能力。
-
-### 3. 多被试跨会话
-
-使用 9 名被试的：
-
-```text
-全部 0train 会话 → 训练
-全部 1test 会话  → 验证
-```
-
-该实验评价模型在已见被试上的跨会话表现。
-
-### 4. LOSO 跨被试
-
-采用 Leave-One-Subject-Out：
-
-```text
-8 名被试 → 训练
-1 名完全未见被试 → 测试
-```
-
-共进行 9 折。每一折都将不同被试作为独立测试对象。
-
-为避免测试被试参与模型选择，每一折分为三个阶段：
-
-1. 使用训练被试的 `0train` 和 `1test` 会话选择最佳 epoch；
-2. 使用 8 名训练被试的全部会话重新训练新模型；
-3. 在保留被试的全部数据上进行最终 trial-level 测试。
-
----
-
-## 八、实验结果
-
-### 1. CSP + SVM
-
-| 实验 | 数据范围 | Accuracy | STD |
-| --- | --- | ---: | ---: |
-| 单被试四分类 | Subject 1 单个运行 | 66.67% | — |
-| 多被试随机划分 | 9 名被试，每人单个运行 | 44.44% | — |
-| 部分数据 LOSO | 9 名被试，每人单个运行 | 38.89% | 13.29% |
-| 完整数据 LOSO | 9 名被试全部会话和运行 | 36.59% | 10.77% |
-
-### 2. 深度学习阶段性结果
-
-| 模型 | 划分方式 | Accuracy |
-| --- | --- | ---: |
-| EEGNet | 混合随机划分基线 | 41.75% |
-| ShallowFBCSPNet | 混合随机划分，无 EMS | 29.51% |
-| ShallowFBCSPNet + EMS | 混合随机划分 | 53.23% |
-| ShallowFBCSPNet + EMS + Cropped | Subject 1 跨会话 | 64.93% |
-| ShallowFBCSPNet + EMS + Cropped | 9 被试跨会话 | 60.15% |
-
-> 不同实验采用的数据划分方式不同，因此不能仅根据表中数值直接判断模型优劣。公平比较应优先使用相同的 LOSO 评价协议。
-
-### 3. ShallowFBCSPNet 完整 9 折 LOSO
-
-| Subject | Accuracy | Balanced Accuracy | Macro-F1 | 最佳 Epoch |
-| ---: | ---: | ---: | ---: | ---: |
-| 1 | 64.76% | 64.76% | 60.05% | 17 |
-| 2 | 29.69% | 29.69% | 25.70% | 17 |
-| 3 | 66.32% | 66.32% | 66.53% | 17 |
-| 4 | 37.15% | 37.15% | 32.54% | 20 |
-| 5 | 25.69% | 25.69% | 11.99% | 20 |
-| 6 | 30.90% | 30.90% | 27.03% | 18 |
-| 7 | 41.84% | 41.84% | 42.24% | 16 |
-| 8 | 58.33% | 58.33% | 55.85% | 20 |
-| 9 | 65.62% | 65.62% | 64.75% | 15 |
-
-汇总结果：
-
-| 指标 | 结果 |
-| --- | ---: |
-| Mean Accuracy | **46.70%** |
-| Accuracy STD | **15.98%** |
-| Mean Balanced Accuracy | **46.70%** |
-| Mean Macro-F1 | **42.96%** |
-| 四分类随机水平 | 25.00% |
-
-相较完整数据 CSP + SVM LOSO：
-
-```text
-ShallowFBCSPNet LOSO：46.70%
-CSP + SVM LOSO：       36.59%
-绝对提升：             10.11 个百分点
-```
-
-需要说明的是，两套流程在具体预处理和模型训练方式上并不完全相同，因此该差值主要用于阶段性对比，而不是严格的消融结论。
-
----
-
-## 九、结果可视化
-
-### 1. 各被试 LOSO 准确率
-
-![LOSO 各被试准确率](results/figures/loso_accuracy_subjects.png)
-
-结果显示不同被试之间存在明显差异：
-
-- Subject 1、3、9 的准确率超过 64%；
-- Subject 8 达到 58.33%；
-- Subject 2、5、6 接近或略高于随机水平；
-- 9 折准确率标准差为 15.98%。
-
-这说明运动想象 EEG 存在显著的跨被试分布差异。
-
-### 2. LOSO 汇总混淆矩阵
-
-![LOSO 汇总混淆矩阵](results/figures/loso_confusion_matrix.png)
-
-汇总混淆矩阵为：
-
-```text
-[[516, 306, 194, 280],
- [191, 650, 226, 229],
- [160, 286, 682, 168],
- [277, 275, 171, 573]]
-```
-
-四类召回率约为：
-
-| 类别 | 正确数 / 总数 | Recall |
-| --- | ---: | ---: |
-| feet | 516 / 1296 | 39.81% |
-| left_hand | 650 / 1296 | 50.15% |
-| right_hand | 682 / 1296 | 52.62% |
-| tongue | 573 / 1296 | 44.21% |
-
-其中 `right_hand` 和 `left_hand` 的总体召回率相对较高，`feet` 的识别难度最大。
-
----
-
-## 十、结果分析
-
-### 1. 深度学习提升了跨被试平均表现
-
-完整 LOSO 实验中：
-
-```text
-CSP + SVM：36.59%
-ShallowFBCSPNet + EMS + Cropped：46.70%
-```
-
-说明深度模型能够学习到比单一 CSP 空间特征更丰富的时空和频带模式。
-
-### 2. EMS 对 ShallowFBCSPNet 影响明显
-
-普通随机划分实验中：
-
-```text
-ShallowFBCSPNet：       29.51%
-ShallowFBCSPNet + EMS：53.23%
-```
-
-说明输入尺度与动态标准化对 EEG 深度学习训练稳定性具有重要影响。
-
-### 3. Cropped Training 改善了数据利用率
-
-Subject 1 跨会话实验达到 64.93%，表明密集预测和 crop 融合能够更充分地利用 trial 内的时序信息。
-
-### 4. 跨被试差异仍是主要瓶颈
-
-Subject 3 的准确率为 66.32%，而 Subject 5 仅为 25.69%。较大的被试间方差说明模型仍容易受到个体脑电分布差异影响。
-
-后续需要重点研究：
-
-- 迁移学习；
-- 领域自适应；
-- 黎曼几何；
-- 被试级归一化；
-- 自监督预训练；
-- EEG Transformer / EEG Conformer；
-- 少样本个体校准。
-
----
-
-## 十一、项目结构
-
-```text
-motor-imagery-moabb-braindecode
-├── README.md
-├── requirements.txt
-├── .gitignore
-├── configs
-├── notebooks
-├── scripts
-│   ├── 01_data_processing
-│   │   ├── check_environment.py
-│   │   ├── load_bnci2014.py
-│   │   ├── create_epochs.py
-│   │   └── preprocess_eeg.py
-│   ├── 02_baseline_csp_svm
-│   │   ├── train_csp_svm_binary.py
-│   │   ├── train_csp_svm_multiclass.py
-│   │   ├── train_multi_subject_csp_svm.py
-│   │   ├── loso_csp_svm.py
-│   │   └── loso_full_csp_svm.py
-│   ├── 03_deep_learning
-│   │   ├── prepare_deep_learning.py
-│   │   ├── create_dataloader.py
-│   │   ├── train_eegnet.py
-│   │   ├── plot_eegnet_history.py
-│   │   ├── evaluate_eegnet.py
-│   │   ├── train_shallowfbcspnet.py
-│   │   ├── plot_shallow_history.py
-│   │   ├── evaluate_shallowfbcspnet.py
-│   │   ├── train_shallow_no_ems.py
-│   │   └── train_shallow_with_ems.py
-│   ├── 04_cropped_training
-│   │   ├── 20_prepare_cropped_dataset.py
-│   │   ├── 21_create_windows_dataset.py
-│   │   ├── train_single_subject_cropped.py
-│   │   ├── 23_plot_cropped_history.py
-│   │   ├── 24_generate_experiment_summary.py
-│   │   ├── prepare_multi_subject_cropped.py
-│   │   └── train_multi_subject_cropped.py
-│   ├── 05_loso_evaluation
-│   │   ├── train_single_fold.py
-│   │   ├── run_all_folds.py
-│   │   └── plot_loso_results.py
-│   └── utils
-├── data
-│   ├── X_eeg.npy
-│   └── y_label.npy
-├── models
-│   ├── EEGNet 与 ShallowFBCSPNet 参数
-│   └── LOSO 各折模型参数
-└── results
-    ├── figures
-    │   ├── eegnet_training_curve.png
-    │   ├── eegnet_confusion_matrix.png
-    │   ├── shallowfbcspnet_training_curve.png
-    │   ├── shallowfbcspnet_confusion_matrix.png
-    │   ├── shallow_cropped_accuracy.png
-    │   ├── shallow_cropped_loss.png
-    │   ├── loso_accuracy_subjects.png
-    │   └── loso_confusion_matrix.png
-    └── metrics
-        ├── experiment_summary.csv
-        ├── loso_summary.csv
-        ├── model_comparison.csv
-        ├── loso_all_results.npz
-        └── loso_subject_*_result.npz
-```
-
-各脚本模块按照实验流程划分：
-
-```text
-01_data_processing
-        ↓
-02_baseline_csp_svm
-        ↓
-03_deep_learning
-        ↓
-04_cropped_training
-        ↓
-05_loso_evaluation
-```
-
-- `01_data_processing`：环境检查、数据读取、Epoch 构建与基础预处理；
-- `02_baseline_csp_svm`：CSP + SVM 二分类、四分类、多被试及 LOSO 基线；
-- `03_deep_learning`：深度学习数据准备、EEGNet、ShallowFBCSPNet 与 EMS 对比；
-- `04_cropped_training`：WindowsDataset、单被试和多被试 Cropped Training；
-- `05_loso_evaluation`：单折训练、完整 9 折运行与 LOSO 结果可视化；
-- `utils`：预留公共数据处理、配置和可视化工具。
-
-> `data/`、`models/`、原始 `.mat` 数据及体积较大的 `.npz` 文件通常不提交到 GitHub，具体规则以 `.gitignore` 为准。
-
----
-
-## 十二、环境安装
-
-### 1. 创建虚拟环境
-
-Windows PowerShell：
+### 创建虚拟环境
 
 ```powershell
 python -m venv .venv
+```
+
+激活环境：
+
+```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
-### 2. 安装依赖
+安装依赖：
 
 ```powershell
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 3. 检查环境
+检查环境：
 
 ```powershell
 python .\scripts\01_data_processing\check_environment.py
@@ -652,230 +112,423 @@ python .\scripts\01_data_processing\check_environment.py
 
 ---
 
-## 十三、运行方法
+## 4. 项目结构
 
-以下命令均在项目根目录中执行。
+清理后的 `scripts/` 目录仅保留主要数据处理、正式训练、评价和汇总脚本。
 
-### 1. 数据读取与检查
-
-```powershell
-python .\scripts\01_data_processing\load_bnci2014.py
-python .\scripts\01_data_processing\create_epochs.py
-python .\scripts\01_data_processing\preprocess_eeg.py
+```text
+motor-imagery-moabb-braindecode/
+├─ configs/
+├─ data/
+├─ docs/
+├─ experiments/
+│  └─ archive/
+│     ├─ cropped_development/
+│     ├─ csp_development/
+│     ├─ deep4net_debug/
+│     └─ deep4net_subject1/
+├─ models/
+├─ notebooks/
+├─ results/
+│  ├─ figures/
+│  ├─ logs/
+│  └─ metrics/
+├─ scripts/
+│  ├─ 01_data_processing/
+│  │  ├─ check_environment.py
+│  │  ├─ load_bnci2014.py
+│  │  ├─ create_epochs.py
+│  │  └─ preprocess_eeg.py
+│  ├─ 02_baseline_csp_svm/
+│  │  └─ loso_full_csp_svm.py
+│  ├─ 03_deep_learning/
+│  │  ├─ train_eegnet.py
+│  │  ├─ plot_eegnet_history.py
+│  │  ├─ evaluate_eegnet.py
+│  │  ├─ train_shallowfbcspnet.py
+│  │  ├─ plot_shallow_history.py
+│  │  └─ evaluate_shallowfbcspnet.py
+│  ├─ 04_cropped_training/
+│  │  ├─ train_single_subject_cropped.py
+│  │  └─ train_deep4net_runwise_cv.py
+│  └─ 05_loso_evaluation/
+│     ├─ train_single_fold.py
+│     ├─ run_all_folds.py
+│     ├─ plot_loso_results.py
+│     ├─ generate_deep4net_summary.py
+│     └─ generate_final_comparison.py
+├─ .gitignore
+├─ README.md
+└─ requirements.txt
 ```
 
-### 2. CSP + SVM 基线
+早期教学脚本、结构测试脚本、诊断脚本和被最终方案替代的实验脚本已移动至：
 
-运行单被试四分类：
-
-```powershell
-python .\scripts\02_baseline_csp_svm\train_csp_svm_multiclass.py
+```text
+experiments/archive/
 ```
 
-运行多被试基线：
+这样既保持正式目录简洁，也保留实验开发过程。
 
-```powershell
-python .\scripts\02_baseline_csp_svm\train_multi_subject_csp_svm.py
+---
+
+## 5. 实验流程
+
+```text
+BNCI2014_001
+      ↓
+加载 EEG 数据
+      ↓
+选择 22 个 EEG 通道
+      ↓
+4–38 Hz 带通滤波
+      ↓
+伏特转换为微伏
+      ↓
+Exponential Moving Standardization
+      ↓
+Epoch / Windows 构建
+      ↓
+传统机器学习与深度学习训练
+      ↓
+交叉验证与跨会话测试
+      ↓
+生成指标、混淆矩阵和模型对比结果
 ```
 
-运行完整数据 LOSO：
+---
+
+## 6. 传统机器学习基线
+
+### CSP + SVM
+
+CSP + SVM 用作传统运动想象分类基线。
+
+运行完整 LOSO：
 
 ```powershell
 python .\scripts\02_baseline_csp_svm\loso_full_csp_svm.py
 ```
 
-### 3. 准备深度学习数据
+当前记录结果：
 
-```powershell
-python .\scripts\03_deep_learning\prepare_deep_learning.py
-python .\scripts\03_deep_learning\create_dataloader.py
+```text
+Mean Accuracy = 38.89%
+Std Accuracy  = 13.29%
 ```
 
-### 4. EEGNet
+该实验采用 9 名被试 Leave-One-Subject-Out 评价协议。
 
-```powershell
-python .\scripts\03_deep_learning\train_eegnet.py
-python .\scripts\03_deep_learning\plot_eegnet_history.py
-python .\scripts\03_deep_learning\evaluate_eegnet.py
-```
+---
 
-### 5. ShallowFBCSPNet
+## 7. ShallowFBCSPNet
 
-训练基础模型：
+ShallowFBCSPNet 是针对 EEG 解码设计的浅层卷积神经网络，其结构与传统 FBCSP 思路具有较强联系。
 
-```powershell
-python .\scripts\03_deep_learning\train_shallowfbcspnet.py
-python .\scripts\03_deep_learning\plot_shallow_history.py
-python .\scripts\03_deep_learning\evaluate_shallowfbcspnet.py
-```
+项目已完成：
 
-运行 EMS 对比实验：
+- 单被试 Cropped training；
+- Exponential Moving Standardization；
+- 多被试 LOSO；
+- 各折模型训练与结果汇总。
 
-```powershell
-python .\scripts\03_deep_learning\train_shallow_no_ems.py
-python .\scripts\03_deep_learning\train_shallow_with_ems.py
-```
-
-### 6. Cropped Training 数据检查
-
-```powershell
-python .\scripts\04_cropped_training\20_prepare_cropped_dataset.py
-python .\scripts\04_cropped_training\21_create_windows_dataset.py
-```
-
-### 7. 单被试 Cropped Training
-
-```powershell
-python .\scripts\04_cropped_training\train_single_subject_cropped.py
-python .\scripts\04_cropped_training\23_plot_cropped_history.py
-```
-
-### 8. 多被试跨会话训练
-
-```powershell
-python .\scripts\04_cropped_training\prepare_multi_subject_cropped.py
-python .\scripts\04_cropped_training\train_multi_subject_cropped.py
-```
-
-生成阶段性实验汇总：
-
-```powershell
-python .\scripts\04_cropped_training\24_generate_experiment_summary.py
-```
-
-### 9. 完整 9 折 LOSO
-
-运行单折：
-
-```powershell
-python .\scripts\05_loso_evaluation\train_single_fold.py
-```
-
-运行全部 9 折：
+### 运行 LOSO
 
 ```powershell
 python .\scripts\05_loso_evaluation\run_all_folds.py
 ```
 
-生成 LOSO 可视化：
+绘制结果：
 
 ```powershell
 python .\scripts\05_loso_evaluation\plot_loso_results.py
 ```
 
-LOSO 完整流程为：
+### LOSO 结果
 
 ```text
-训练被试内部跨会话选择最佳 Epoch
-                ↓
-使用 8 名训练被试全部会话重新训练
-                ↓
-在 1 名完全未见被试上进行 Trial-level 测试
-                ↓
-循环 9 折并汇总 Accuracy、Macro-F1 与混淆矩阵
+Mean Accuracy          = 46.70%
+Std Accuracy           = 15.98%
+Mean Balanced Accuracy = 46.70%
+Mean Macro-F1          = 42.96%
+```
+
+与 CSP + SVM 相比，平均准确率提升：
+
+```text
+46.70% - 38.89% = 7.81 个百分点
 ```
 
 ---
 
-## 十四、实验可重复性说明
+## 8. Deep4Net
 
-实验结果会受到以下因素影响：
+Deep4Net 使用多层卷积结构和 Dense Prediction 进行 EEG 解码。
 
-- 随机种子；
-- 数据划分方式；
-- 预处理频带；
-- 时间窗口；
-- EMS 参数；
-- 模型初始化；
-- 学习率与训练轮次；
-- Braindecode、MNE、PyTorch 和 Scikit-learn 版本；
-- CPU 与 GPU 数值差异。
-
-当前深度学习实验使用固定随机种子：
+### 当前正式配置
 
 ```text
-20260805
+Input length   = 1000 samples
+EEG channels   = 22
+Classes        = 4
+Filter         = 4–38 Hz
+Dropout        = 0.25
+Optimizer      = Adam
+Learning rate  = 0.001
+Weight decay   = 0
+CV epochs      = 35
 ```
 
-LOSO 实验中，测试被试不参与梯度更新、EarlyStopping 或最佳 epoch 选择。
+### Run-wise 交叉验证协议
 
----
-
-## 十五、项目状态
-
-### 已完成
-
-- [x] 项目环境搭建；
-- [x] BNCI2014_001 自动下载；
-- [x] 数据结构检查；
-- [x] 事件解析与 Epoch 切分；
-- [x] EEG 通道选择与带通滤波；
-- [x] CSP + SVM 二分类与四分类；
-- [x] 多被试传统机器学习实验；
-- [x] CSP + SVM 完整 LOSO；
-- [x] EEGNet 训练与评价；
-- [x] ShallowFBCSPNet 训练与评价；
-- [x] Exponential Moving Standardization；
-- [x] WindowsDataset 构建；
-- [x] Braindecode Cropped Training；
-- [x] 单被试跨会话实验；
-- [x] 多被试跨会话实验；
-- [x] ShallowFBCSPNet 完整 9 折 LOSO；
-- [x] 训练历史、模型和指标保存；
-- [x] LOSO 柱状图与混淆矩阵生成。
-
-### 后续计划
-
-- [ ] 统一 EEGNet、ShallowFBCSPNet 与 CSP-SVM 的 LOSO 协议；
-- [ ] 增加 Deep4Net；
-- [ ] 增加 EEGConformer 或其他 Transformer 模型；
-- [ ] 增加黎曼几何分类基线；
-- [ ] 研究迁移学习和领域自适应；
-- [ ] 增加多随机种子重复实验；
-- [ ] 增加统计显著性检验；
-- [ ] 完成模型推理接口；
-- [ ] 接入实时 EEG 数据流；
-- [ ] 与 C/C++ Data Manager 和网络转发模块集成。
-
----
-
-## 十六、后续系统方向
-
-本项目可与实时 EEG 数据管理系统结合，形成：
+每名被试的 `0train` 会话包含 6 个 run。
 
 ```text
-EEG 采集设备
-      ↓
-C/C++ Driver
-      ↓
-Data Manager
-      ↓
-TCP / WLAN 数据流
-      ↓
-Python 在线预处理
-      ↓
-深度学习模型推理
-      ↓
-运动意图输出
-      ↓
-机器人或交互设备控制
+Fold 1：run 0 验证，其余 run 训练
+Fold 2：run 1 验证，其余 run 训练
+...
+Fold 6：run 5 验证，其余 run 训练
 ```
 
-该方向能够进一步连接 BCI 算法、实时软件系统和具身智能应用。
+对六折每个 Epoch 的验证准确率求平均，选择平均验证准确率最高的 Epoch。随后：
+
+1. 使用完整 `0train` 重新训练；
+2. 训练轮数固定为所选 Epoch；
+3. 在训练完成后评价一次 `1test`。
+
+运行示例：
+
+```powershell
+python .\scripts\04_cropped_training\train_deep4net_runwise_cv.py --subject 3
+```
+
+批量运行 Subject 4–9：
+
+```powershell
+4..9 | ForEach-Object {
+    python .\scripts\04_cropped_training\train_deep4net_runwise_cv.py `
+        --subject $_ 2>&1 |
+        Tee-Object ".\results\logs\deep4net_subject$($_)_runwise_cv.log"
+}
+```
+
+### Deep4Net 各被试结果
+
+| Subject | CV Accuracy | Test Accuracy | Macro-F1 | Selected Epoch |
+|---:|---:|---:|---:|---:|
+| 3 | 71.18% | 63.54% | 63.11% | 32 |
+| 4 | 46.88% | 36.11% | 30.82% | 30 |
+| 5 | 34.72% | 28.13% | 19.70% | 23 |
+| 6 | 39.24% | 32.99% | 27.24% | 27 |
+| 7 | 54.51% | 52.08% | 47.16% | 32 |
+| 8 | 65.63% | 46.88% | 45.24% | 32 |
+| 9 | 64.93% | 63.89% | 59.30% | 35 |
+| **Mean ± Std** | **53.87%** | **46.23% ± 14.44%** | **41.80%** | — |
+
+Deep4Net 在不同被试之间存在较明显性能差异，测试准确率范围为：
+
+```text
+28.13% – 63.89%
+```
+
+这反映了运动想象 EEG 较强的个体差异和跨会话分布变化。
+
+### 生成 Deep4Net 汇总
+
+```powershell
+python .\scripts\05_loso_evaluation\generate_deep4net_summary.py
+```
+
+输出：
+
+```text
+results/metrics/deep4net_all_subject_summary.csv
+results/metrics/deep4net_overall_summary.txt
+```
 
 ---
 
-## 十七、说明
+## 9. EEGNet
 
-本项目主要用于学习和复现运动想象脑电分类的标准数据处理、深度学习和跨被试评价流程。
+项目已完成 EEGNet 的基础训练、EMS 标准化尝试和训练曲线绘制。
 
-当前结果属于阶段性实验结果，不代表经过大规模超参数搜索后的最优性能。不同实验采用的数据范围和划分协议并不完全一致，阅读结果时应优先关注实验协议，而不能只比较单个准确率数值。
+现有结果主要属于开发阶段结果，尚未完成与 CSP + SVM、ShallowFBCSPNet 或 Deep4Net 完全一致的正式评价协议，因此暂不纳入最终模型排名。
+
+相关脚本：
+
+```text
+scripts/03_deep_learning/train_eegnet.py
+scripts/03_deep_learning/plot_eegnet_history.py
+scripts/03_deep_learning/evaluate_eegnet.py
+```
 
 ---
 
-## 参考项目与工具
+## 10. 最终模型对比
 
-- MOABB：Mother of All BCI Benchmarks
-- MNE-Python：EEG/MEG 数据分析工具
-- Braindecode：基于 PyTorch 的 EEG 深度学习框架
-- BNCI2014_001：BCI Competition IV 2a 运动想象数据集
+运行：
+
+```powershell
+python .\scripts\05_loso_evaluation\generate_final_comparison.py
+```
+
+生成：
+
+```text
+results/metrics/model_comparison_final.csv
+results/metrics/model_comparison_multi_subject.csv
+results/metrics/model_comparison_single_subject.csv
+results/metrics/model_comparison_final.md
+results/metrics/model_comparison_notes.txt
+results/figures/model_comparison_accuracy.png
+results/figures/model_comparison_macro_f1.png
+```
+
+### 多被试总体结果
+
+| 模型 | 评价协议 | 被试 | Accuracy | Macro-F1 |
+|---|---|---:|---:|---:|
+| CSP + SVM | 9-subject LOSO | 1–9 | 38.89% ± 13.29% | — |
+| ShallowFBCSPNet | 9-subject LOSO | 1–9 | **46.70% ± 15.98%** | **42.96%** |
+| Deep4Net | 0train 内部 run-wise CV，1test 跨会话测试 | 3–9 | 46.23% ± 14.44% | 41.80% |
+
+> CSP + SVM 与 ShallowFBCSPNet 使用相同的 LOSO 协议，可以进行较直接比较。Deep4Net 使用被试内跨会话协议，回答的是不同实验问题，因此不能简单作为同一排行榜进行比较。
+
+### 单被试开发结果
+
+| 模型 | Subject | Accuracy | Macro-F1 | 说明 |
+|---|---:|---:|---:|---|
+| ShallowFBCSPNet + EMS + Cropped | 1 | 64.93% | — | 单被试跨会话开发实验 |
+| Deep4Net 原始配置 | 1 | 45.49% | 37.80% | Dropout=0.5，AdamW，Weight Decay=5e-4 |
+| Deep4Net 低正则化配置 | 1 | 63.89% | 63.10% | Dropout=0.25，Adam，Weight Decay=0 |
+| EEGNet | 1 | — | — | 尚未完成协议匹配的正式评价 |
+
+---
+
+## 11. 主要实验结论
+
+1. 在相同 9 被试 LOSO 协议下，ShallowFBCSPNet 将 CSP + SVM 的平均准确率从 38.89% 提升至 46.70%。
+2. Deep4Net 在 Subject 3–9 被试内跨会话测试中的平均准确率为 46.23%，平均 Macro-F1 为 41.80%。
+3. Deep4Net 的测试准确率在 28.13% 到 63.89% 之间，说明模型效果受到明显的被试差异影响。
+4. 原始 Deep4Net 配置正则化过强，降低 Dropout、改用 Adam 并关闭权重衰减后，Subject 1 的准确率由 45.49% 提升至 63.89%。
+5. 某些被试仍存在明显类别预测偏置，跨会话分布变化和个体差异仍是主要挑战。
+6. 单独查看 Accuracy 不足以反映类别均衡性，因此实验同时使用 Balanced Accuracy、Macro-F1、分类报告和混淆矩阵进行分析。
+
+---
+
+## 12. 结果文件
+
+### 指标
+
+```text
+results/metrics/
+```
+
+主要包含：
+
+- 各模型训练历史；
+- LOSO 各折结果；
+- Deep4Net 各被试指标；
+- 分类报告；
+- 预测结果；
+- 最终模型对比表。
+
+### 图像
+
+```text
+results/figures/
+```
+
+主要包含：
+
+- Accuracy 曲线；
+- Loss 曲线；
+- 混淆矩阵；
+- LOSO 结果图；
+- 模型总体对比图。
+
+### 模型
+
+```text
+models/
+```
+
+模型权重文件默认不上传 GitHub，相关规则已写入 `.gitignore`。
+
+---
+
+## 13. 文档
+
+```text
+docs/
+├─ MI_BCI_experiment_report.md
+├─ model_comparison.md
+├─ model_comparison_generated.md
+└─ LOSO_analysis.md
+```
+
+文档包括实验报告、模型比较和 LOSO 分析。
+
+---
+
+## 14. Git 使用建议
+
+查看状态：
+
+```powershell
+git status
+```
+
+提交代码：
+
+```powershell
+git add -A
+git commit -m "Update BCI experiments and documentation"
+git push
+```
+
+数据集和模型文件通常较大，不应直接上传：
+
+```text
+data/
+models/*.pth
+```
+
+---
+
+## 15. 后续工作
+
+后续可以继续完成：
+
+- EEGNet 协议匹配评价；
+- Deep4Net 全 9 被试统一实验；
+- 更严格的嵌套交叉验证；
+- 数据增强与类间决策边界优化；
+- 多被试预训练与单被试微调；
+- Riemannian Geometry 基线；
+- Transformer 类 EEG 模型；
+- 实时 EEG 数据流与在线推理；
+- 与已有 EEG Data Manager 项目连接。
+
+---
+
+## 16. 项目状态
+
+当前已完成：
+
+```text
+数据加载与检查                 PASS
+EEG预处理                      PASS
+Epoch与Windows构建             PASS
+CSP + SVM基线                  PASS
+ShallowFBCSPNet单被试训练       PASS
+ShallowFBCSPNet LOSO            PASS
+Deep4Net结构与训练流程验证      PASS
+Deep4Net run-wise CV            PASS
+Deep4Net跨会话评价              PASS
+全被试结果汇总                  PASS
+最终模型对比                    PASS
+脚本目录精简                    PASS
+```
+
+本项目已经形成从数据处理、传统基线、深度学习训练，到规范评价和结果汇总的完整运动想象 BCI 复现流程。
