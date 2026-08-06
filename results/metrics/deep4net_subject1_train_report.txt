@@ -1,0 +1,35 @@
+Deep4Net Subject 1 - 0train
+==================================================
+Samples           : 288
+Accuracy          : 0.4410
+Balanced accuracy : 0.4410
+Macro-F1          : 0.3690
+Weighted-F1       : 0.3690
+
+Classification report
+---------------------
+              precision    recall  f1-score   support
+
+        feet     0.3594    0.3194    0.3382        72
+   left_hand     0.7209    0.4306    0.5391        72
+  right_hand     0.4000    1.0000    0.5714        72
+      tongue     1.0000    0.0139    0.0274        72
+
+    accuracy                         0.4410       288
+   macro avg     0.6201    0.4410    0.3690       288
+weighted avg     0.6201    0.4410    0.3690       288
+
+Confusion matrix
+----------------
+[[23  4 45  0]
+ [ 0 31 41  0]
+ [ 0  0 72  0]
+ [41  8 22  1]]
+
+True class counts
+-----------------
+{'feet': 72, 'left_hand': 72, 'right_hand': 72, 'tongue': 72}
+
+Predicted class counts
+----------------------
+{'feet': 64, 'left_hand': 43, 'right_hand': 180, 'tongue': 1}

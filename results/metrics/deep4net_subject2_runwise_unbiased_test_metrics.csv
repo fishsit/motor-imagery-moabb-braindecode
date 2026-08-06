@@ -1,0 +1,2 @@
+﻿subject,internal_validation_run,best_epoch,n_test_samples,accuracy,balanced_accuracy,macro_f1,weighted_f1,predicted_feet,predicted_left_hand,predicted_right_hand,predicted_tongue
+2,5,29,288,0.3645833333333333,0.36458333333333337,0.32642690270210584,0.32642690270210584,21,11,174,82

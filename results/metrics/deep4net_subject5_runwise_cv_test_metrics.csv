@@ -1,0 +1,2 @@
+﻿subject,n_runs,max_cv_epochs,selected_epoch,cv_mean_valid_accuracy,cv_std_valid_accuracy,final_train_accuracy,n_test_samples,test_accuracy,test_balanced_accuracy,test_macro_f1,test_weighted_f1,predicted_feet,predicted_left_hand,predicted_right_hand,predicted_tongue
+5,6,35,23,0.34722222222222227,0.06273105439242341,0.6597222222222222,288,0.28125,0.28124999999999994,0.197023111859937,0.19702311185993698,82,200,5,1

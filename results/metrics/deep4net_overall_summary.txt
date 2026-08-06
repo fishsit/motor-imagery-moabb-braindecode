@@ -1,0 +1,35 @@
+
+Deep4Net Multi Subject Evaluation
+========================================
+
+Subjects evaluated:
+[3, 4, 5, 6, 7, 8, 9]
+
+
+Test Accuracy
+----------------------------------------
+Mean accuracy :
+0.4623
+
+Std accuracy :
+0.1444
+
+
+Test Macro-F1
+----------------------------------------
+Mean Macro-F1 :
+0.4180
+
+Std Macro-F1 :
+0.1644
+
+
+Cross Validation
+----------------------------------------
+Mean CV validation accuracy :
+0.5387
+
+
+Detailed results saved:
+results\metrics\deep4net_all_subject_summary.csv
+

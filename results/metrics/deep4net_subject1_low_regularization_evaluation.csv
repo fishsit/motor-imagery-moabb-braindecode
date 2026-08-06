@@ -1,0 +1,2 @@
+﻿subject,train_session,test_session,dropout,optimizer,weight_decay,n_samples,accuracy,balanced_accuracy,macro_f1,weighted_f1,predicted_feet,predicted_left_hand,predicted_right_hand,predicted_tongue
+1,0train,1test,0.25,Adam,0.0,288,0.6388888888888888,0.6388888888888888,0.631030818436148,0.6310308184361479,83,103,66,36

@@ -1,0 +1,3 @@
+﻿split,display_name,n_samples,accuracy,balanced_accuracy,macro_f1,weighted_f1,predicted_feet,predicted_left_hand,predicted_right_hand,predicted_tongue
+train,0train,288,0.4409722222222222,0.4409722222222222,0.36904789015069994,0.36904789015069994,64,43,180,1
+valid,1test,288,0.4548611111111111,0.45486111111111116,0.3780336343026892,0.37803363430268916,56,58,174,0

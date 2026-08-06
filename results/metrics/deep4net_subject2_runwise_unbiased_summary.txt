@@ -1,0 +1,15 @@
+Deep4Net Subject 2 Run-wise Protocol
+====================================================
+Internal training samples   : 240
+Internal validation samples : 48
+Internal validation run     : 5
+Internal best accuracy      : 0.5417
+Selected best epoch         : 29
+Complete 0train samples     : 288
+Final train accuracy        : 0.9583
+Held-out 1test samples      : 288
+Test accuracy               : 0.3646
+Test balanced accuracy      : 0.3646
+Test Macro-F1               : 0.3264
+Test Weighted-F1            : 0.3264
+Final model                 : models\deep4net_subject2_runwise_unbiased_final.pth

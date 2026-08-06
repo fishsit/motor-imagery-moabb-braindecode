@@ -1,0 +1,2 @@
+﻿subject,train_session,test_session,n_samples,accuracy,balanced_accuracy,macro_f1,weighted_f1
+1,0train,1test,288,0.4548611111111111,0.45486111111111116,0.3780336343026892,0.37803363430268916

@@ -1,0 +1,8 @@
+﻿result_category,model,subjects,evaluation_protocol,accuracy,accuracy_std,macro_f1,macro_f1_std,status,notes
+Multi-subject overall experiment,CSP + SVM,1-9,9-subject LOSO,0.3889,0.1329,,,Completed,Leave-one-subject-out cross-subject evaluation.
+Multi-subject overall experiment,ShallowFBCSPNet,1-9,9-subject LOSO,0.467,0.1598,0.4296,,Completed,Same LOSO subject protocol as CSP + SVM.
+Multi-subject overall experiment,Deep4Net,"3,4,5,6,7,8,9","Run-wise CV inside 0train, held-out 1test evaluation",0.4623015873015873,0.14444094674234859,0.41795950721798614,0.16441968363698506,Completed,Subjects 3-9; evaluation protocol differs from LOSO.
+Single-subject development experiment,ShallowFBCSPNet + EMS + Cropped,1,0train to 1test cross-session validation,0.6493,,,,Development result,Single-subject result; not LOSO.
+Single-subject development experiment,Deep4Net baseline,1,0train to 1test checkpoint validation,0.4549,,0.378,,Development result,"Dropout=0.5, AdamW, weight decay=5e-4."
+Single-subject development experiment,Deep4Net low regularization,1,0train to 1test checkpoint validation,0.6389,,0.631,,Development result,"Dropout=0.25, Adam, weight decay=0."
+Single-subject development experiment,EEGNet,1,Comparable final evaluation not completed,,,,,Pending,Existing EEGNet training progress is not sufficient for a protocol-matched final result.
